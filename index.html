@@ -3,30 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="siteTitle">Scent Craft | دار العطور والتركيبات الفاخرة</title>
+    <title>Scent Craft | دار العطور والتركيبات الفاخرة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        gold: { 100: '#fef3c7', 300: '#fcd34d', 400: '#fbbf24', 500: '#d4af37', 600: '#aa7c11' },
-                        obsidian: '#0a0c10',
-                        panel: '#121620'
-                    },
-                    fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] }
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { gold: { 400: '#fbbf24', 500: '#d4af37' }, obsidian: '#0a0c10', panel: '#121620' }, fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] } } } }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <!-- مكتبة Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-[#0a0c10] text-gray-100 min-h-screen flex flex-col justify-between selection:bg-gold-500 selection:text-black">
 
-    <!-- Header -->
     <header class="sticky top-0 z-40 glass-card border-b border-gold-500/20 shadow-2xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="showSection('store')">
@@ -38,13 +27,11 @@
                     <p class="text-[9px] text-amber-200/60 tracking-widest font-light">HIGH PERFUMERY</p>
                 </div>
             </div>
-
             <nav class="hidden md:flex items-center space-x-8 space-x-reverse text-sm font-bold text-gray-200">
                 <button onclick="showSection('store')" class="hover:text-gold-400 transition py-2">المتجر الرئيسي</button>
                 <button onclick="showSection('blender')" class="hover:text-gold-400 transition py-2">معمل التركيب 3D</button>
                 <button onclick="showSection('myOrders')" class="hover:text-gold-400 transition py-2">طلباتي</button>
             </nav>
-
             <div class="flex items-center space-x-3 space-x-reverse">
                 <button onclick="toggleCart(true)" class="relative p-3 rounded-2xl bg-[#121620] border border-gold-500/30 text-gold-400">
                     <i class="fa-solid fa-bag-shopping text-base"></i>
@@ -57,10 +44,7 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
-
-        <!-- STORE SECTION -->
         <section id="secStore" class="space-y-10">
             <div class="glass-card rounded-3xl p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8 border border-gold-500/30 relative overflow-hidden shadow-2xl">
                 <div class="space-y-4 max-w-xl text-center md:text-right">
@@ -77,17 +61,14 @@
                     <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80" alt="Perfume" class="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_30px_rgba(212,175,55,0.3)]">
                 </div>
             </div>
-
             <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </section>
 
-        <!-- BLENDER SECTION -->
         <section id="secBlender" class="hidden space-y-8">
             <div class="text-center space-y-2">
                 <h2 class="text-4xl font-black font-amiri gold-gradient-text">معمل صياغة العطور التفاعلي</h2>
                 <p class="text-gray-300 text-sm">حدد النوتات، الحجم، والتركيز للحصول على زجاجة فاخرة باسمك</p>
             </div>
-
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <div class="lg:col-span-7 space-y-6">
                     <div class="glass-card p-6 rounded-2xl space-y-3">
@@ -125,12 +106,11 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="lg:col-span-5 sticky top-28">
                     <div class="glass-card p-8 rounded-3xl text-center space-y-6 shadow-2xl">
                         <div class="relative w-40 h-60 border-2 border-gold-500/50 rounded-b-3xl rounded-t-xl mx-auto flex flex-col justify-end p-2 bg-[#0a0c10]/90">
                             <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-6 gold-bg rounded-t-md shadow-md"></div>
-                            <div id="liquid" class="w-full rounded-b-2xl transition-all duration-700 bg-gradient-to-t from-amber-700 to-gold-500/50" style="height: 65%;"></div>
+                            <div class="w-full rounded-b-2xl transition-all duration-700 bg-gradient-to-t from-amber-700 to-gold-500/50" style="height: 65%;"></div>
                             <div class="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/90 border border-gold-500/40 p-2.5 rounded-lg text-center shadow-2xl">
                                 <p id="prevText" class="text-xs font-bold text-white font-amiri truncate">اسم العطر</p>
                                 <p id="prevSpecs" class="text-[8px] text-gold-400 mt-1">50ml - EdP</p>
@@ -145,19 +125,17 @@
             </div>
         </section>
 
-        <!-- MY ORDERS SECTION -->
         <section id="secMyOrders" class="hidden space-y-6">
             <h2 class="text-3xl font-black font-amiri gold-gradient-text">سجل طلباتي ومتابعتها</h2>
             <div id="customerOrdersList" class="space-y-4"></div>
         </section>
-
     </main>
 
-    <!-- Auth Modal -->
+    <!-- Modals -->
     <div id="authModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="glass-card max-w-sm w-full rounded-3xl p-6 space-y-4 shadow-2xl border border-gold-500/30">
             <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                <h3 id="authTitle" class="font-bold text-white text-lg">تسجيل الدخول / إنشاء حساب</h3>
+                <h3 class="font-bold text-white text-lg">تسجيل الدخول / إنشاء حساب</h3>
                 <button onclick="closeAuthModal()" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form onsubmit="handleAuthSubmit(event)" class="space-y-3 text-xs">
@@ -174,7 +152,6 @@
         </div>
     </div>
 
-    <!-- Cart Drawer -->
     <div id="cartDrawer" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden">
         <div class="absolute left-0 top-0 bottom-0 w-full max-w-md bg-[#121620] p-6 flex flex-col justify-between border-r border-gold-500/30 shadow-2xl">
             <div>
@@ -194,7 +171,6 @@
         </div>
     </div>
 
-    <!-- Checkout Modal -->
     <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="glass-card max-w-md w-full rounded-3xl p-6 space-y-4 shadow-2xl border border-gold-500/30">
             <div class="flex justify-between items-center border-b border-gray-800 pb-3">
@@ -210,6 +186,12 @@
         </div>
     </div>
 
+    <!-- إعدادات Supabase -->
+    <script>
+        const SUPABASE_URL = 'حط_URL_بتاعك_هنا'; // مثال: https://liwkmvhmjguqmnmonfqr.supabase.co
+        const SUPABASE_ANON_KEY = 'حط_المفتاح_بتاعك_هنا'; // المفتاح اللي بيبدأ بـ sb_publishable
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    </script>
     <script src="js/app.js"></script>
 </body>
 </html>
