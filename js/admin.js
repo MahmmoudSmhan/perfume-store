@@ -1,8 +1,20 @@
-let orders = JSON.parse(localStorage.getItem('scent_orders')) || [];
+let orders = [];
+
+// Check Session & Auth Status on Load
+document.addEventListener('DOMContentLoaded', () => {
+    const isLoggedIn = localStorage.getItem('scent_admin_logged_in');
+    if (isLoggedIn === 'true') {
+        document.getElementById('authOverlay').classList.add('hidden');
+        renderAdmin();
+    } else {
+        document.getElementById('authOverlay').classList.remove('hidden');
+    }
+});
 
 function checkAdminAuth() {
     const pass = document.getElementById('adminPass').value;
     if (pass === '1234') {
+        localStorage.setItem('scent_admin_logged_in', 'true');
         document.getElementById('authOverlay').classList.add('hidden');
         renderAdmin();
     } else {
@@ -10,22 +22,32 @@ function checkAdminAuth() {
     }
 }
 
+function adminLogout() {
+    localStorage.removeItem('scent_admin_logged_in');
+    document.getElementById('authOverlay').classList.remove('hidden');
+}
+
 function renderAdmin() {
     orders = JSON.parse(localStorage.getItem('scent_orders')) || [];
     const visits = localStorage.getItem('scent_visits') || '1';
 
-    document.getElementById('admCnt').textContent = orders.length;
-    document.getElementById('admVisits').textContent = `${visits} زائر`;
+    if(document.getElementById('admCnt')) document.getElementById('admCnt').textContent = orders.length;
+    if(document.getElementById('admVisits')) document.getElementById('admVisits').textContent = `${visits} زائر`;
     
-    const tot = orders.reduce((a, b) => a + parseInt(b.total), 0);
-    document.getElementById('admRev').textContent = `${tot} ج.م`;
-    document.getElementById('admPrf').textContent = `${Math.round(tot * 0.45)} ج.م`;
+    const tot = orders.reduce((a, b) => a + parseInt(b.total || 0), 0);
+    if(document.getElementById('admRev')) document.getElementById('admRev').textContent = `${tot} ج.م`;
+    if(document.getElementById('admPrf')) document.getElementById('admPrf').textContent = `${Math.round(tot * 0.45)} ج.م`;
 
     renderOrdersTable();
     renderProductsAdmin();
     renderNotesAdmin();
     loadSettingsForm();
 }
+
+// Live Real-Time Updates Across Tabs
+window.addEventListener('storage', (e) => {
+    renderAdmin();
+});
 
 function switchTab(tab) {
     document.getElementById('secTabOrders').classList.add('hidden');
@@ -56,9 +78,11 @@ function switchTab(tab) {
     }
 }
 
-// Orders Logic
+// Orders Table
 function renderOrdersTable() {
-    document.getElementById('ordersTbody').innerHTML = orders.map((o, idx) => `
+    const tbody = document.getElementById('ordersTbody');
+    if(!tbody) return;
+    tbody.innerHTML = orders.map((o, idx) => `
         <tr class="hover:bg-white/5 transition cursor-pointer" onclick="openOrderDetail(${idx})">
             <td class="p-3 text-gold-400 font-bold">${o.id}</td>
             <td class="p-3 font-bold text-white">${o.name}</td>
@@ -125,12 +149,14 @@ function saveProduct(e) {
     });
     localStorage.setItem('scent_products', JSON.stringify(prods));
     renderProductsAdmin();
-    alert('تم إضافة المنتج بنجاح وظهوره في متجر العميل!');
+    alert('تم إضافة المنتج وتسميعه في متجر العميل مباشرة!');
 }
 
 function renderProductsAdmin() {
     let prods = JSON.parse(localStorage.getItem('scent_products')) || [];
-    document.getElementById('admProductsList').innerHTML = prods.map((p, idx) => `
+    const container = document.getElementById('admProductsList');
+    if(!container) return;
+    container.innerHTML = prods.map((p, idx) => `
         <div class="bg-black/60 p-4 rounded-xl border border-gray-800 space-y-2 text-xs flex justify-between items-center">
             <div>
                 <p class="font-bold text-white">${p.name}</p>
@@ -154,19 +180,23 @@ function saveNote(e) {
     let notes = JSON.parse(localStorage.getItem('scent_notes')) || { base: [], heart: [], top: [] };
     const type = document.getElementById('nType').value;
     const name = document.getElementById('nName').value;
+    if(!notes[type]) notes[type] = [];
     notes[type].push(name);
     localStorage.setItem('scent_notes', JSON.stringify(notes));
     renderNotesAdmin();
-    alert('تم إضافة النوتة لمعمل التركيب 3D!');
+    alert('تم إضافة النوتة لمعمل التركيب وتحديث متجر العميل تلقائياً!');
 }
 
 function renderNotesAdmin() {
     let notes = JSON.parse(localStorage.getItem('scent_notes')) || { base: [], heart: [], top: [] };
+    const container = document.getElementById('admNotesList');
+    if(!container) return;
     let html = '';
     ['base', 'heart', 'top'].forEach(t => {
+        const arr = notes[t] || [];
         html += `<div class="bg-black/60 p-4 rounded-xl border border-gray-800 space-y-2">
             <h4 class="font-bold text-gold-400">${t.toUpperCase()} Notes</h4>
-            ${notes[t].map((n, idx) => `
+            ${arr.map((n, idx) => `
                 <div class="flex justify-between items-center text-gray-300">
                     <span>${n}</span>
                     <button onclick="delNote('${t}', ${idx})" class="text-red-400 text-[10px]"><i class="fa-solid fa-trash"></i></button>
@@ -174,7 +204,7 @@ function renderNotesAdmin() {
             `).join('')}
         </div>`;
     });
-    document.getElementById('admNotesList').innerHTML = html;
+    container.innerHTML = html;
 }
 
 function delNote(type, idx) {
@@ -184,7 +214,7 @@ function delNote(type, idx) {
     renderNotesAdmin();
 }
 
-// Store Settings CMS Logic
+// Store Settings
 function loadSettingsForm() {
     let set = JSON.parse(localStorage.getItem('scent_settings')) || {
         brandName: "SCENT CRAFT",
@@ -192,10 +222,10 @@ function loadSettingsForm() {
         bannerDesc: "ابتكر زجاجة عطرك الخاصة عبر المعمل التفاعلي، اختر النوتات العطرية الفاخرة، واحفر اسمك بالليزر على الزجاجة.",
         waPhone: "201000000000"
     };
-    document.getElementById('setBrandName').value = set.brandName;
-    document.getElementById('setBannerTitle').value = set.bannerTitle;
-    document.getElementById('setBannerDesc').value = set.bannerDesc;
-    document.getElementById('setWA').value = set.waPhone;
+    if(document.getElementById('setBrandName')) document.getElementById('setBrandName').value = set.brandName;
+    if(document.getElementById('setBannerTitle')) document.getElementById('setBannerTitle').value = set.bannerTitle;
+    if(document.getElementById('setBannerDesc')) document.getElementById('setBannerDesc').value = set.bannerDesc;
+    if(document.getElementById('setWA')) document.getElementById('setWA').value = set.waPhone;
 }
 
 function saveStoreSettings(e) {
@@ -207,5 +237,5 @@ function saveStoreSettings(e) {
         waPhone: document.getElementById('setWA').value
     };
     localStorage.setItem('scent_settings', JSON.stringify(set));
-    alert('تم حفظ إعدادات المتجر بنجاح وتطبيقها على واجهة العميل!');
+    alert('تم حفظ إعدادات المتجر وتطبيقها فوراُ!');
 }
