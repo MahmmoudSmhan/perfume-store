@@ -13,7 +13,7 @@ const NOTES_DB = {
 let cart = [];
 let currentBlend = { base: null, heart: null, top: null };
 
-// Record Website Visits
+// تسجيل زيارة جديدة للمتجر
 let visits = parseInt(localStorage.getItem('scent_visits') || '0') + 1;
 localStorage.setItem('scent_visits', visits.toString());
 
@@ -52,7 +52,7 @@ function renderProducts() {
 function renderNotes() {
     const renderSet = (arr, id, type) => {
         document.getElementById(id).innerHTML = arr.map(n => `
-            <button onclick="selectNote('${type}', '${n}')" class="p-3 bg-obsidian border border-gray-800 hover:border-gold-500 rounded-xl text-xs font-bold text-right text-gray-300 transition">${n}</button>
+            <button onclick="selectNote('${type}', '${n}')" class="p-3 bg-[#0a0c10] border border-gray-800 hover:border-gold-500 rounded-xl text-xs font-bold text-right text-gray-300 transition">${n}</button>
         `).join('');
     };
     renderSet(NOTES_DB.base, 'baseNotesContainer', 'base');
@@ -80,7 +80,7 @@ function calcPrice() {
 
 function addCustomToCart() {
     if (!currentBlend.base || !currentBlend.heart || !currentBlend.top) {
-        return alert('برجاء تحديد جميع النوتات العطرية لتركيبتك الملكية!');
+        return alert('برجاء تحديد جميع النوتات العطرية لتركيبتك!');
     }
     const eng = document.getElementById('bEngrave').value || "تركيبة مخصصة";
     const price = parseInt(document.getElementById('customPrice').textContent);
@@ -101,7 +101,7 @@ function addToCart(id) {
 function updateCartUI() {
     document.getElementById('cartBadge').textContent = cart.reduce((a, b) => a + b.qty, 0);
     document.getElementById('cartItemsContainer').innerHTML = cart.map((i, idx) => `
-        <div class="flex justify-between items-center bg-obsidian p-3.5 rounded-xl border border-gray-800 text-xs">
+        <div class="flex justify-between items-center bg-[#0a0c10] p-3.5 rounded-xl border border-gray-800 text-xs">
             <div>
                 <p class="font-bold text-white">${i.name}</p>
                 <p class="text-gray-400 mt-0.5">${i.price} ج.م × ${i.qty}</p>
@@ -149,7 +149,7 @@ function confirmOrder(e) {
     cart = [];
     updateCartUI();
     closeCheckout();
-    alert('تم استلام أوردرك بنجاح! وسنتواصل معك فوراً لتجهيزه.');
+    alert('تم استلام أوردرك بنجاح!');
 }
 
 function sendWA() {
@@ -162,7 +162,6 @@ function sendWA() {
     window.open(`https://wa.me/201000000000?text=${m}`, '_blank');
 }
 
-// Reviews System
 function renderReviews() {
     let reviews = JSON.parse(localStorage.getItem('scent_reviews')) || [
         { name: "م/ محمود فوزي", stars: 5, comment: "عطر ثباته ممتاز جداً وحفر الاسم على الزجاجة بالليزر لمسة فخمة للغاية!" },
@@ -172,7 +171,7 @@ function renderReviews() {
         <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-2">
             <div class="flex justify-between items-center">
                 <h4 class="font-bold text-white text-sm">${r.name}</h4>
-                <span class="text-xs text-gold-400">{'⭐'.repeat(r.stars)}</span>
+                <span class="text-xs text-gold-400">${'⭐'.repeat(r.stars)}</span>
             </div>
             <p class="text-xs text-gray-300 leading-relaxed">${r.comment}</p>
         </div>
@@ -189,5 +188,5 @@ function submitReview(e) {
     });
     localStorage.setItem('scent_reviews', JSON.stringify(reviews));
     renderReviews();
-    alert('شكراً لتقييمك الراقي!');
+    alert('شكراً لتقييمك!');
 }
