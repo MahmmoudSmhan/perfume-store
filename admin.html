@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scent Craft | لوحة تحكم الأدمن</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen bg-obsidian text-gray-100 p-6">
+
+    <!-- Auth Protection Screen -->
+    <div id="authOverlay" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card max-w-sm w-full p-6 rounded-3xl text-center space-y-4">
+            <i class="fa-solid fa-lock text-4xl text-gold-400"></i>
+            <h2 class="text-xl font-bold font-amiri text-white">تسجيل دخول الأدمن</h2>
+            <input type="password" id="adminPass" placeholder="كلمة المرور (1234)" class="w-full bg-obsidian border border-gray-800 rounded-xl p-3 text-center text-sm text-white">
+            <button onclick="checkAdminAuth()" class="w-full gold-bg text-black font-bold py-3 rounded-xl">دخول</button>
+        </div>
+    </div>
+
+    <!-- Admin Content -->
+    <div class="max-w-7xl mx-auto space-y-6">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+            <div>
+                <h1 class="text-3xl font-black font-amiri text-white">لوحة تحكم الإدارة</h1>
+                <p class="text-xs text-gray-400">متابعة المبيعات والطلبات الواردة</p>
+            </div>
+            <a href="index.html" class="text-xs bg-gold-500/20 text-gold-400 border border-gold-500/30 px-4 py-2 rounded-xl">الرجوع للمتجر</a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="glass-card p-5 rounded-2xl border-r-4 border-gold-500">
+                <span class="text-xs text-gray-400">إجمالي المبيعات</span>
+                <p id="admRev" class="text-2xl font-black text-white mt-1">0 ج.م</p>
+            </div>
+            <div class="glass-card p-5 rounded-2xl border-r-4 border-blue-500">
+                <span class="text-xs text-gray-400">الطلبات الواردة</span>
+                <p id="admCnt" class="text-2xl font-black text-white mt-1">0</p>
+            </div>
+            <div class="glass-card p-5 rounded-2xl border-r-4 border-emerald-500">
+                <span class="text-xs text-gray-400">الربح الصافي التقديري</span>
+                <p id="admPrf" class="text-2xl font-black text-white mt-1">0 ج.م</p>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl space-y-4">
+            <h3 class="font-bold text-white">سجل طلبات العملاء المباشرة</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-xs">
+                    <thead class="bg-obsidian text-gray-400 border-b border-gray-800">
+                        <tr>
+                            <th class="p-3">رقم الطلب</th>
+                            <th class="p-3">العميل</th>
+                            <th class="p-3">الهاتف</th>
+                            <th class="p-3">العنوان</th>
+                            <th class="p-3">المنتجات</th>
+                            <th class="p-3">الإجمالي</th>
+                            <th class="p-3">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTbody" class="divide-y divide-gray-800 text-gray-300"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Admin Logic -->
+    <script src="js/admin.js"></script>
+</body>
+</html>
