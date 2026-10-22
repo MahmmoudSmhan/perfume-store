@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scent Craft | دار العطور والتركيبات الفاخرة</title>
+    <title id="siteTitle">Scent Craft | دار العطور والتركيبات الفاخرة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -26,7 +26,7 @@
 </head>
 <body class="bg-[#0a0c10] text-gray-100 min-h-screen flex flex-col justify-between selection:bg-gold-500 selection:text-black">
 
-    <!-- Header / Navbar -->
+    <!-- Header -->
     <header class="sticky top-0 z-40 glass-card border-b border-gold-500/20 shadow-2xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="showSection('store')">
@@ -34,8 +34,8 @@
                     <i class="fa-solid fa-crown"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-black font-amiri gold-gradient-text tracking-wider">SCENT CRAFT</h1>
-                    <p class="text-[9px] text-amber-200/60 tracking-widest font-light">HIGH PERFUMERY & CUSTOM BLENDS</p>
+                    <h1 id="brandHeaderName" class="text-2xl font-black font-amiri gold-gradient-text tracking-wider">SCENT CRAFT</h1>
+                    <p id="brandSubHeader" class="text-[9px] text-amber-200/60 tracking-widest font-light">HIGH PERFUMERY & CUSTOM BLENDS</p>
                 </div>
             </div>
 
@@ -64,9 +64,9 @@
         <section id="secStore" class="space-y-10">
             <div class="glass-card rounded-3xl p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8 border border-gold-500/30 relative overflow-hidden shadow-2xl">
                 <div class="space-y-4 max-w-xl text-center md:text-right">
-                    <span class="px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-300 text-xs font-bold tracking-widest">Niche Perfumery</span>
-                    <h2 class="text-4xl md:text-6xl font-black font-amiri text-white leading-tight">عطرك.. توقيع شخصيتك <span class="gold-gradient-text">الفريد</span></h2>
-                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">ابتكر زجاجة عطرك الخاصة عبر المعمل التفاعلي، اختر النوتات العطرية الفاخرة، واحفر اسمك بالليزر على الزجاجة.</p>
+                    <span id="bannerBadge" class="px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-300 text-xs font-bold tracking-widest">Niche Perfumery</span>
+                    <h2 id="bannerTitle" class="text-4xl md:text-6xl font-black font-amiri text-white leading-tight">عطرك.. توقيع شخصيتك <span class="gold-gradient-text">الفريد</span></h2>
+                    <p id="bannerDesc" class="text-gray-300 text-sm md:text-base leading-relaxed">ابتكر زجاجة عطرك الخاصة عبر المعمل التفاعلي، اختر النوتات العطرية الفاخرة، واحفر اسمك بالليزر على الزجاجة.</p>
                     <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
                         <button onclick="showSection('blender')" class="gold-bg text-black font-black px-8 py-4 rounded-2xl shadow-xl hover:opacity-90 transition flex items-center gap-2">
                             <i class="fa-solid fa-flask"></i> ابدأ التركيب الآن
@@ -74,10 +74,11 @@
                     </div>
                 </div>
                 <div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
-                    <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80" alt="Perfume" class="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_30px_rgba(212,175,55,0.3)]">
+                    <img id="bannerImg" src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80" alt="Perfume" class="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_30px_rgba(212,175,55,0.3)]">
                 </div>
             </div>
 
+            <!-- Dynamic Products Container -->
             <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </section>
 
