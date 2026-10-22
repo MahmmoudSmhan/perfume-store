@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scent Craft | لوحة تحكم الأدمن الشاملة</title>
+    <title>Scent Craft | لوحة تحكم الأدمن</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,8 +12,8 @@
                 extend: {
                     colors: {
                         gold: { 400: '#fbbf24', 500: '#d4af37' },
-                        obsidian: '#090a0f',
-                        panel: '#12151e'
+                        obsidian: '#0a0c10',
+                        panel: '#121620'
                     },
                     fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] }
                 }
@@ -24,18 +24,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-obsidian text-gray-100 p-4 md:p-8 min-h-screen">
+<body class="bg-[#0a0c10] text-gray-100 p-4 md:p-8 min-h-screen">
 
     <!-- Auth Protected Screen -->
     <div id="authOverlay" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center p-4">
-        <div class="glass-card max-w-sm w-full p-8 rounded-3xl text-center space-y-4 border border-gold-500/40">
+        <div class="glass-card max-w-sm w-full p-8 rounded-3xl text-center space-y-4 border border-gold-500/40 shadow-2xl">
             <div class="w-16 h-16 gold-bg rounded-2xl flex items-center justify-center text-black text-2xl mx-auto shadow-lg shadow-gold-500/20">
-                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-2xl font-bold font-amiri text-white">لوحة تحكم إدارة Scent Craft</h2>
-            <p class="text-xs text-gray-400">يرجى إدخال كلمة المرور للوصول للإحصائيات</p>
-            <input type="password" id="adminPass" placeholder="كلمة المرور" class="w-full bg-black border border-gray-700 rounded-xl p-3 text-center text-sm text-white outline-none focus:border-gold-500">
-            <button onclick="checkAdminAuth()" class="w-full gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg">دخول الأدمن</button>
+            <p class="text-xs text-gray-400">أدخل كلمة المرور للوصول للإحصائيات والطلبات</p>
+            <input type="password" id="adminPass" placeholder="كلمة المرور (1234)" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-center text-sm text-white outline-none focus:border-gold-500">
+            <button onclick="checkAdminAuth()" class="w-full gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg hover:opacity-90 transition">تسجيل الدخول</button>
         </div>
     </div>
 
@@ -48,10 +48,10 @@
                 <h1 class="text-3xl font-black font-amiri text-white flex items-center gap-2">
                     <i class="fa-solid fa-chart-line text-gold-500"></i> Dashboard الإدارة المباشرة
                 </h1>
-                <p class="text-xs text-gray-400 mt-1">إحصائيات الزيارات، المبيعات، ومتابعة جميع أوردرات المتجر</p>
+                <p class="text-xs text-gray-400 mt-1">إحصائيات الزيارات، المبيعات، ومتابعة أوردرات المتجر</p>
             </div>
             <a href="index.html" class="gold-bg text-black font-bold text-xs px-5 py-3 rounded-xl shadow-lg flex items-center gap-2 hover:opacity-90 transition">
-                <i class="fa-solid fa-store"></i> الذهاب إلى المتجر الرئيسي (index)
+                <i class="fa-solid fa-store"></i> العودة للمتجر الرئيسي (index.html)
             </a>
         </div>
 
@@ -91,7 +91,7 @@
         <div class="glass-card p-6 rounded-3xl space-y-4">
             <div class="flex justify-between items-center border-b border-gray-800 pb-3">
                 <h3 class="font-bold text-white text-base">جدول الطلبات المباشرة</h3>
-                <span class="text-xs text-gray-400">اضغط على أي طلب لعرض كافة تفاصيله</span>
+                <span class="text-xs text-gray-400">اضغط على أي صف لرؤية تفاصيل الطلب بالكامل</span>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-right text-xs">
@@ -102,7 +102,7 @@
                             <th class="p-3">الهاتف</th>
                             <th class="p-3">العنوان</th>
                             <th class="p-3">المجموع</th>
-                            <th class="p-3">تفاصيل وإجراء</th>
+                            <th class="p-3">إجراءات</th>
                         </tr>
                     </thead>
                     <tbody id="ordersTbody" class="divide-y divide-gray-800 text-gray-300"></tbody>
@@ -119,11 +119,9 @@
                 <h3 id="modalOrderId" class="font-bold text-gold-400 text-base">تفاصيل الطلب</h3>
                 <button onclick="closeOrderDetail()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div id="modalOrderBody" class="space-y-4 text-xs">
-                <!-- Dynamic Detail JS -->
-            </div>
+            <div id="modalOrderBody" class="space-y-4 text-xs"></div>
             <div class="flex gap-2 pt-2 border-t border-gray-800">
-                <button onclick="window.print()" class="flex-grow gold-bg text-black font-bold py-3 rounded-xl">طباعة بوليصة / فاتورة</button>
+                <button onclick="window.print()" class="flex-grow gold-bg text-black font-bold py-3 rounded-xl">طباعة الفاتورة</button>
                 <button onclick="closeOrderDetail()" class="bg-gray-800 text-gray-300 font-bold px-5 py-3 rounded-xl">إغلاق</button>
             </div>
         </div>
