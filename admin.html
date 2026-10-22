@@ -46,13 +46,18 @@
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-6">
             <div>
                 <h1 class="text-3xl font-black font-amiri text-white flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-gold-500"></i> لوحة التحكم الشاملة بالمتجر (DocTypes CMS)
+                    <i class="fa-solid fa-sliders text-gold-500"></i> لوحة التحكم الشاملة بالمتجر (CMS)
                 </h1>
                 <p class="text-xs text-gray-400 mt-1">التحكم الكامل بالمنتجات، النوتات العطرية، الطلبات، وبنرات المتجر</p>
             </div>
-            <a href="index.html" target="_blank" class="gold-bg text-black font-bold text-xs px-5 py-3 rounded-xl shadow-lg flex items-center gap-2">
-                <i class="fa-solid fa-store"></i> معاينة المتجر المباشر (index.html)
-            </a>
+            <div class="flex items-center gap-3">
+                <a href="index.html" target="_blank" class="gold-bg text-black font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-store"></i> المتجر المباشر
+                </a>
+                <button onclick="adminLogout()" class="bg-red-500/20 border border-red-500/40 text-red-400 font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-red-500/30 transition">
+                    <i class="fa-solid fa-right-from-bracket ml-1"></i> خروج
+                </button>
+            </div>
         </div>
 
         <!-- Dashboard Stats Cards -->
@@ -87,7 +92,7 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs (DocTypes) -->
+        <!-- Navigation Tabs -->
         <div class="flex border-b border-gray-800 space-x-6 space-x-reverse text-xs font-bold">
             <button onclick="switchTab('orders')" id="tab_orders" class="pb-3 border-b-2 border-gold-500 text-gold-400">سجل الطلبات (Orders)</button>
             <button onclick="switchTab('products')" id="tab_products" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white">إدارة المنتجات (Products DocType)</button>
