@@ -195,7 +195,12 @@ function renderReviews() {
         </div>
     `).join('');
 }
-
+window.addEventListener('storage', (e) => {
+    applyStoreSettings();
+    renderProducts();
+    renderNotes();
+    renderReviews();
+});
 function submitReview(e) {
     e.preventDefault();
     let reviews = JSON.parse(localStorage.getItem('scent_reviews')) || [];
