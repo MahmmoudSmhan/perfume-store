@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function checkUserSession() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await window.supabaseClient.auth.getSession();
     if (session) currentUser = session.user;
     updateAuthUI();
 }
@@ -38,9 +38,9 @@ async function handleAuthSubmit(e) {
     const btn = e.target.querySelector('button[type="submit"]');
     btn.textContent = 'جاري التحميل...';
 
-    let { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    let { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
     if (error && error.message.includes('Invalid login credentials')) {
-        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({ email, password });
+        const { data: signUpData, error: signUpError } = await window.supabaseClient.auth.signUp({ email, password });
         if (signUpError) { alert('خطأ: ' + signUpError.message); btn.textContent = 'دخول / تسجيل'; return; }
         data = signUpData;
         alert('تم إنشاء حسابك بنجاح!');
@@ -54,7 +54,7 @@ async function handleAuthSubmit(e) {
 }
 
 async function logoutUser() {
-    await supabase.auth.signOut();
+    await window.supabaseClient.auth.signOut();
     currentUser = null;
     updateAuthUI();
     showSection('store');
@@ -74,7 +74,7 @@ function showSection(sec) {
 }
 
 async function renderProducts() {
-    const { data: prods, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    const { data: prods, error } = await window.supabaseClient.from('products').select('*').order('created_at', { ascending: false });
     if (error) return;
     if (prods.length === 0) {
         document.getElementById('productsGrid').innerHTML = '<p class="text-gray-400 text-center col-span-3">لا توجد منتجات حالياً.</p>';
@@ -96,7 +96,7 @@ async function renderProducts() {
 }
 
 async function renderNotes() {
-    const { data: notes, error } = await supabase.from('perfume_notes').select('*');
+    const { data: notes, error } = await window.supabaseClient.from('perfume_notes').select('*');
     if (error) return;
 
     const renderSet = (type, id) => {
@@ -190,7 +190,7 @@ async function confirmOrder(e) {
     const orderId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
     const total = parseInt(document.getElementById('cartTotal').textContent.replace(/[^\d]/g, ''));
 
-    const { error: orderError } = await supabase.from('orders').insert([{
+    const { error: orderError } = await window.supabaseClient.from('orders').insert([{
         id: orderId, user_id: currentUser.id, customer_name: document.getElementById('custName').value,
         phone: document.getElementById('custPhone').value, address: document.getElementById('custAddr').value, total: total
     }]);
@@ -198,7 +198,7 @@ async function confirmOrder(e) {
     if (orderError) { alert('حدث خطأ: ' + orderError.message); btn.textContent = 'تأكيد'; return; }
 
     const itemsToInsert = cart.map(item => ({ order_id: orderId, product_name: item.name, price: item.price, quantity: item.qty }));
-    await supabase.from('order_items').insert(itemsToInsert);
+    await window.supabaseClient.from('order_items').insert(itemsToInsert);
 
     cart = []; updateCartUI(); closeCheckout(); e.target.reset(); btn.textContent = 'تأكيد وإرسال الأوردر';
     alert('تم إرسال طلبك بنجاح!'); showSection('myOrders');
@@ -207,7 +207,7 @@ async function confirmOrder(e) {
 async function renderCustomerOrders() {
     const container = document.getElementById('customerOrdersList');
     container.innerHTML = '<p class="text-center text-gray-400">جاري التحميل...</p>';
-    const { data: orders, error } = await supabase.from('orders').select(`*, order_items (*)`).eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    const { data: orders, error } = await window.supabaseClient.from('orders').select(`*, order_items (*)`).eq('user_id', currentUser.id).order('created_at', { ascending: false });
     if (error) return;
     container.innerHTML = orders.length === 0 ? '<p class="text-gray-400 text-xs">لا توجد طلبات.</p>' : orders.map(o => `
         <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-3 text-xs">
@@ -222,7 +222,7 @@ async function renderCustomerOrders() {
 }
 
 async function loadStoreSettings() {
-    const { data: set } = await supabase.from('settings').select('*').eq('id', 1).single();
+    const { data: set } = await window.supabaseClient.from('settings').select('*').eq('id', 1).single();
     if (set) {
         if (document.getElementById('brandHeaderName')) document.getElementById('brandHeaderName').textContent = set.brand_name;
         if (document.getElementById('bannerTitle')) document.getElementById('bannerTitle').textContent = set.banner_title;
