@@ -1,27 +1,44 @@
-const PRODUCTS = [
+// Default Initial Data if LocalStorage is Empty
+const DEFAULT_PRODUCTS = [
     { id: 1, name: "عطر عود موناكو الملكي", price: 580, notes: "دهن العود الهندي، ورد طائفي، عنبر بلتيك", image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=500&q=80" },
     { id: 2, name: "بلاكبيري & باودر فرنسي", price: 420, notes: "توت أسود، مسك أبيض، مسك الروم", image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=500&q=80" },
     { id: 3, name: "توباكو آند ليذر نيش", price: 650, notes: "تبغ كوبي، جلد فاخر، فانيليا مدغشقر", image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=500&q=80" }
 ];
 
-const NOTES_DB = {
+const DEFAULT_NOTES = {
     base: ["دهن العود الصافي", "العنبر الملكي", "خشب الصندل", "الفانيليا السوداء"],
     heart: ["الورد الطائفي", "الياسمين البلدي", "التبغ والتوابل"],
     top: ["البرغموت الإيطالي", "الافندر الفرنسي", "الحمضيات الفواحة"]
 };
 
+let products = JSON.parse(localStorage.getItem('scent_products')) || DEFAULT_PRODUCTS;
+let notesDB = JSON.parse(localStorage.getItem('scent_notes')) || DEFAULT_NOTES;
+let storeSettings = JSON.parse(localStorage.getItem('scent_settings')) || {
+    brandName: "SCENT CRAFT",
+    bannerTitle: "عطرك.. توقيع شخصيتك الفريد",
+    bannerDesc: "ابتكر زجاجة عطرك الخاصة عبر المعمل التفاعلي، اختر النوتات العطرية الفاخرة، واحفر اسمك بالليزر على الزجاجة.",
+    waPhone: "201000000000"
+};
+
 let cart = [];
 let currentBlend = { base: null, heart: null, top: null };
 
-// تسجيل زيارة جديدة للمتجر
+// Record Visitor Counter
 let visits = parseInt(localStorage.getItem('scent_visits') || '0') + 1;
 localStorage.setItem('scent_visits', visits.toString());
 
 document.addEventListener('DOMContentLoaded', () => {
+    applyStoreSettings();
     renderProducts();
     renderNotes();
     renderReviews();
 });
+
+function applyStoreSettings() {
+    if(document.getElementById('brandHeaderName')) document.getElementById('brandHeaderName').textContent = storeSettings.brandName;
+    if(document.getElementById('bannerTitle')) document.getElementById('bannerTitle').innerHTML = storeSettings.bannerTitle;
+    if(document.getElementById('bannerDesc')) document.getElementById('bannerDesc').textContent = storeSettings.bannerDesc;
+}
 
 function showSection(sec) {
     document.getElementById('secStore').classList.add('hidden');
@@ -34,7 +51,8 @@ function showSection(sec) {
 }
 
 function renderProducts() {
-    document.getElementById('productsGrid').innerHTML = PRODUCTS.map(p => `
+    products = JSON.parse(localStorage.getItem('scent_products')) || DEFAULT_PRODUCTS;
+    document.getElementById('productsGrid').innerHTML = products.map(p => `
         <div class="glass-card rounded-3xl overflow-hidden p-5 flex flex-col justify-between space-y-4">
             <img src="${p.image}" class="h-52 w-full object-cover rounded-2xl" alt="${p.name}">
             <div>
@@ -50,14 +68,15 @@ function renderProducts() {
 }
 
 function renderNotes() {
+    notesDB = JSON.parse(localStorage.getItem('scent_notes')) || DEFAULT_NOTES;
     const renderSet = (arr, id, type) => {
         document.getElementById(id).innerHTML = arr.map(n => `
             <button onclick="selectNote('${type}', '${n}')" class="p-3 bg-[#0a0c10] border border-gray-800 hover:border-gold-500 rounded-xl text-xs font-bold text-right text-gray-300 transition">${n}</button>
         `).join('');
     };
-    renderSet(NOTES_DB.base, 'baseNotesContainer', 'base');
-    renderSet(NOTES_DB.heart, 'heartNotesContainer', 'heart');
-    renderSet(NOTES_DB.top, 'topNotesContainer', 'top');
+    renderSet(notesDB.base, 'baseNotesContainer', 'base');
+    renderSet(notesDB.heart, 'heartNotesContainer', 'heart');
+    renderSet(notesDB.top, 'topNotesContainer', 'top');
 }
 
 function selectNote(type, name) {
@@ -90,7 +109,7 @@ function addCustomToCart() {
 }
 
 function addToCart(id) {
-    const p = PRODUCTS.find(x => x.id === id);
+    const p = products.find(x => x.id === id);
     const found = cart.find(x => x.id === id);
     if (found) found.qty++;
     else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
@@ -159,13 +178,12 @@ function sendWA() {
     let m = `*طلب جديد من Scent Craft*%0A*الاسم:* ${n}%0A*الهاتف:* ${p}%0A%0A*الطلبات:*%0A`;
     cart.forEach(i => m += `- ${i.name} (${i.qty})%0A`);
     m += `%0A*المجموع:* ${document.getElementById('cartTotal').textContent}`;
-    window.open(`https://wa.me/201000000000?text=${m}`, '_blank');
+    window.open(`https://wa.me/${storeSettings.waPhone}?text=${m}`, '_blank');
 }
 
 function renderReviews() {
     let reviews = JSON.parse(localStorage.getItem('scent_reviews')) || [
-        { name: "م/ محمود فوزي", stars: 5, comment: "عطر ثباته ممتاز جداً وحفر الاسم على الزجاجة بالليزر لمسة فخمة للغاية!" },
-        { name: "أ/ سارة علي", stars: 5, comment: "تركيبة المسك والبرغموت رائعة جداً، تغليف راقي وسرعة في التوصيل." }
+        { name: "م/ محمود فوزي", stars: 5, comment: "عطر ثباته ممتاز جداً وحفر الاسم على الزجاجة بالليزر لمسة فخمة للغاية!" }
     ];
     document.getElementById('reviewsList').innerHTML = reviews.map(r => `
         <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-2">
