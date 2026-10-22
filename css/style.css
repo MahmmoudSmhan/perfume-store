@@ -1,0 +1,26 @@
+body {
+    font-family: 'Cairo', sans-serif;
+    background-color: #0a0c10 !important;
+    color: #f3f4f6 !important;
+}
+
+.gold-gradient-text {
+    background: linear-gradient(135deg, #fff2a8 0%, #d4af37 50%, #aa7c11 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gold-bg {
+    background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%) !important;
+}
+
+.glass-card {
+    background: rgba(18, 22, 32, 0.8) !important;
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(212, 175, 55, 0.2) !important;
+}
+
+.glass-card:hover {
+    border-color: rgba(212, 175, 55, 0.4) !important;
+    box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.15);
+}
