@@ -12,7 +12,7 @@ function checkAdminAuth() {
 
 function renderAdmin() {
     orders = JSON.parse(localStorage.getItem('scent_orders')) || [];
-    const visits = localStorage.getItem('scent_visits') || '12';
+    const visits = localStorage.getItem('scent_visits') || '1';
 
     document.getElementById('admCnt').textContent = orders.length;
     document.getElementById('admVisits').textContent = `${visits} زائر`;
@@ -28,9 +28,9 @@ function renderAdmin() {
             <td class="p-3">${o.phone}</td>
             <td class="p-3">${o.address}</td>
             <td class="p-3 font-bold text-white">${o.total}</td>
-            <td class="p-3 flex items-center gap-2">
+            <td class="p-3">
                 <button onclick="event.stopPropagation(); openOrderDetail(${idx})" class="bg-gold-500/20 text-gold-400 border border-gold-500/30 px-3 py-1 rounded-lg text-[10px] font-bold">عرض التفاصيل</button>
-                <button onclick="event.stopPropagation(); delOrder(${idx})" class="text-red-400 p-1"><i class="fa-solid fa-trash"></i></button>
+                <button onclick="event.stopPropagation(); delOrder(${idx})" class="text-red-400 p-1 mr-2"><i class="fa-solid fa-trash"></i></button>
             </td>
         </tr>
     `).join('');
@@ -47,10 +47,10 @@ function openOrderDetail(idx) {
             <p><strong class="text-gold-400">تاريخ الطلب:</strong> ${o.date || 'اليوم'}</p>
         </div>
         <div class="space-y-2">
-            <p class="font-bold text-white">المنتجات والتركيبات المطلوبة:</p>
+            <p class="font-bold text-white">المنتجات المطلوبة:</p>
             ${o.items.map(i => `
                 <div class="flex justify-between items-center bg-gray-900 p-3 rounded-xl border border-gray-800">
-                    <span>${i.name} (${i.qty} قطع)</span>
+                    <span>${i.name} (عدد: ${i.qty})</span>
                     <span class="text-gold-400 font-bold">${i.price * i.qty} ج.م</span>
                 </div>
             `).join('')}
