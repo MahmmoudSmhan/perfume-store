@@ -13,17 +13,24 @@ const NOTES_DB = {
 let cart = [];
 let currentBlend = { base: null, heart: null, top: null };
 
+// Record Website Visits
+let visits = parseInt(localStorage.getItem('scent_visits') || '0') + 1;
+localStorage.setItem('scent_visits', visits.toString());
+
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     renderNotes();
+    renderReviews();
 });
 
 function showSection(sec) {
     document.getElementById('secStore').classList.add('hidden');
     document.getElementById('secBlender').classList.add('hidden');
+    document.getElementById('secReviews').classList.add('hidden');
 
     if (sec === 'store') document.getElementById('secStore').classList.remove('hidden');
     if (sec === 'blender') document.getElementById('secBlender').classList.remove('hidden');
+    if (sec === 'reviews') document.getElementById('secReviews').classList.remove('hidden');
 }
 
 function renderProducts() {
@@ -134,7 +141,8 @@ function confirmOrder(e) {
         phone: document.getElementById('custPhone').value,
         address: document.getElementById('custAddr').value,
         items: [...cart],
-        total: document.getElementById('cartTotal').textContent
+        total: document.getElementById('cartTotal').textContent,
+        date: new Date().toLocaleDateString('ar-EG')
     };
     orders.unshift(order);
     localStorage.setItem('scent_orders', JSON.stringify(orders));
@@ -152,4 +160,34 @@ function sendWA() {
     cart.forEach(i => m += `- ${i.name} (${i.qty})%0A`);
     m += `%0A*المجموع:* ${document.getElementById('cartTotal').textContent}`;
     window.open(`https://wa.me/201000000000?text=${m}`, '_blank');
+}
+
+// Reviews System
+function renderReviews() {
+    let reviews = JSON.parse(localStorage.getItem('scent_reviews')) || [
+        { name: "م/ محمود فوزي", stars: 5, comment: "عطر ثباته ممتاز جداً وحفر الاسم على الزجاجة بالليزر لمسة فخمة للغاية!" },
+        { name: "أ/ سارة علي", stars: 5, comment: "تركيبة المسك والبرغموت رائعة جداً، تغليف راقي وسرعة في التوصيل." }
+    ];
+    document.getElementById('reviewsList').innerHTML = reviews.map(r => `
+        <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-2">
+            <div class="flex justify-between items-center">
+                <h4 class="font-bold text-white text-sm">${r.name}</h4>
+                <span class="text-xs text-gold-400">{'⭐'.repeat(r.stars)}</span>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed">${r.comment}</p>
+        </div>
+    `).join('');
+}
+
+function submitReview(e) {
+    e.preventDefault();
+    let reviews = JSON.parse(localStorage.getItem('scent_reviews')) || [];
+    reviews.unshift({
+        name: document.getElementById('revName').value,
+        stars: parseInt(document.getElementById('revStars').value),
+        comment: document.getElementById('revComment').value
+    });
+    localStorage.setItem('scent_reviews', JSON.stringify(reviews));
+    renderReviews();
+    alert('شكراً لتقييمك الراقي!');
 }
