@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scent Craft | لوحة تحكم الأدمن</title>
+    <title>Scent Craft | دار العطور والتركيبات الفاخرة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     colors: {
-                        gold: { 400: '#fbbf24', 500: '#d4af37' },
+                        gold: { 100: '#fef3c7', 300: '#fcd34d', 400: '#fbbf24', 500: '#d4af37', 600: '#aa7c11' },
                         obsidian: '#0a0c10',
                         panel: '#121620'
                     },
@@ -24,109 +24,211 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-[#0a0c10] text-gray-100 p-4 md:p-8 min-h-screen">
+<body class="bg-[#0a0c10] text-gray-100 min-h-screen flex flex-col justify-between selection:bg-gold-500 selection:text-black">
 
-    <!-- Auth Protected Screen -->
-    <div id="authOverlay" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center p-4">
-        <div class="glass-card max-w-sm w-full p-8 rounded-3xl text-center space-y-4 border border-gold-500/40 shadow-2xl">
-            <div class="w-16 h-16 gold-bg rounded-2xl flex items-center justify-center text-black text-2xl mx-auto shadow-lg shadow-gold-500/20">
-                <i class="fa-solid fa-shield-halved"></i>
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 glass-card border-b border-gold-500/20 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="showSection('store')">
+                <div class="w-12 h-12 rounded-2xl gold-bg flex items-center justify-center text-black font-black text-2xl shadow-lg shadow-gold-500/20">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black font-amiri gold-gradient-text tracking-wider">SCENT CRAFT</h1>
+                    <p class="text-[9px] text-amber-200/60 tracking-widest font-light">HIGH PERFUMERY & CUSTOM BLENDS</p>
+                </div>
             </div>
-            <h2 class="text-2xl font-bold font-amiri text-white">لوحة تحكم إدارة Scent Craft</h2>
-            <p class="text-xs text-gray-400">أدخل كلمة المرور للوصول للإحصائيات والطلبات</p>
-            <input type="password" id="adminPass" placeholder="كلمة المرور (1234)" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-center text-sm text-white outline-none focus:border-gold-500">
-            <button onclick="checkAdminAuth()" class="w-full gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg hover:opacity-90 transition">تسجيل الدخول</button>
-        </div>
-    </div>
 
-    <!-- Main Admin Dashboard -->
-    <div class="max-w-7xl mx-auto space-y-8">
-        
-        <!-- Header with Link to Store -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-6">
+            <nav class="hidden md:flex items-center space-x-8 space-x-reverse text-sm font-bold text-gray-200">
+                <button onclick="showSection('store')" class="hover:text-gold-400 transition py-2">المتجر الرئيسي</button>
+                <button onclick="showSection('blender')" class="hover:text-gold-400 transition py-2 flex items-center gap-2">
+                    <span>معمل التركيب 3D</span>
+                    <span class="text-[9px] bg-gold-500 text-black px-2 py-0.5 rounded-full font-black">حسّي</span>
+                </button>
+                <button onclick="showSection('reviews')" class="hover:text-gold-400 transition py-2">آراء العملاء</button>
+            </nav>
+
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <button onclick="toggleCart(true)" class="relative p-3 rounded-2xl bg-[#121620] border border-gold-500/30 text-gold-400 hover:border-gold-400 transition">
+                    <i class="fa-solid fa-bag-shopping text-base"></i>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-gold-500 text-black text-xs font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+
+        <!-- STORE SECTION -->
+        <section id="secStore" class="space-y-10">
+            <div class="glass-card rounded-3xl p-8 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8 border border-gold-500/30 relative overflow-hidden shadow-2xl">
+                <div class="space-y-4 max-w-xl text-center md:text-right">
+                    <span class="px-4 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-300 text-xs font-bold tracking-widest">Niche Perfumery</span>
+                    <h2 class="text-4xl md:text-6xl font-black font-amiri text-white leading-tight">عطرك.. توقيع شخصيتك <span class="gold-gradient-text">الفريد</span></h2>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">ابتكر زجاجة عطرك الخاصة عبر المعمل التفاعلي، اختر النوتات العطرية الفاخرة، واحفر اسمك بالليزر على الزجاجة.</p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
+                        <button onclick="showSection('blender')" class="gold-bg text-black font-black px-8 py-4 rounded-2xl shadow-xl hover:opacity-90 transition flex items-center gap-2">
+                            <i class="fa-solid fa-flask"></i> ابدأ التركيب الآن
+                        </button>
+                    </div>
+                </div>
+                <div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+                    <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80" alt="Perfume" class="relative z-10 w-full h-full object-contain drop-shadow-[0_20px_30px_rgba(212,175,55,0.3)]">
+                </div>
+            </div>
+
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <!-- BLENDER SECTION -->
+        <section id="secBlender" class="hidden space-y-8">
+            <div class="text-center space-y-2">
+                <h2 class="text-4xl font-black font-amiri gold-gradient-text">معمل صياغة العطور التفاعلي</h2>
+                <p class="text-gray-300 text-sm">حدد النوتات، الحجم، والتركيز للحصول على زجاجة فاخرة باسمك</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="glass-card p-6 rounded-2xl space-y-3">
+                        <h3 class="font-bold text-gold-400 text-sm">1. نوتة القاعدة (Base Note)</h3>
+                        <div id="baseNotesContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl space-y-3">
+                        <h3 class="font-bold text-gold-400 text-sm">2. نوتة القلب (Heart Note)</h3>
+                        <div id="heartNotesContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl space-y-3">
+                        <h3 class="font-bold text-gold-400 text-sm">3. نوتة الافتتاحية (Top Note)</h3>
+                        <div id="topNotesContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-300 mb-2">الحجم</label>
+                                <select id="bSize" onchange="calcPrice()" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-xs text-white">
+                                    <option value="50" data-f="1">50ml (قياسي)</option>
+                                    <option value="100" data-f="1.6">100ml (فاخر)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-300 mb-2">التركيز</label>
+                                <select id="bConc" onchange="calcPrice()" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-xs text-white">
+                                    <option value="EdP" data-f="1">Eau de Parfum (20%)</option>
+                                    <option value="Extrait" data-f="1.35">Extrait de Parfum (35%)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-300 mb-2">اسم العطر أو صاحب العطر (حفر بالليزر)</label>
+                            <input type="text" id="bEngrave" oninput="updateBottleUI()" placeholder="مثال: Royal Oud - Ahmad" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-xs text-white">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 sticky top-28">
+                    <div class="glass-card p-8 rounded-3xl text-center space-y-6 shadow-2xl">
+                        <div class="relative w-40 h-60 border-2 border-gold-500/50 rounded-b-3xl rounded-t-xl mx-auto flex flex-col justify-end p-2 bg-[#0a0c10]/90">
+                            <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-6 gold-bg rounded-t-md shadow-md"></div>
+                            <div id="liquid" class="w-full rounded-b-2xl transition-all duration-700 bg-gradient-to-t from-amber-700 to-gold-500/50" style="height: 65%;"></div>
+                            <div class="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-black/90 border border-gold-500/40 p-2.5 rounded-lg text-center shadow-2xl">
+                                <p id="prevText" class="text-xs font-bold text-white font-amiri truncate">اسم العطر</p>
+                                <p id="prevSpecs" class="text-[8px] text-gold-400 mt-1">50ml - EdP</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#0a0c10]/80 p-4 rounded-xl text-xs text-right space-y-2 border border-gray-800">
+                            <p class="text-gold-400 font-bold border-b border-gray-800 pb-1">الهرم العطري الخاص:</p>
+                            <div class="flex justify-between"><span class="text-gray-400">الافتتاحية:</span><span id="txtTop" class="text-white font-bold">لم تحدد</span></div>
+                            <div class="flex justify-between"><span class="text-gray-400">القلب:</span><span id="txtHeart" class="text-white font-bold">لم تحدد</span></div>
+                            <div class="flex justify-between"><span class="text-gray-400">القاعدة:</span><span id="txtBase" class="text-white font-bold">لم تحدد</span></div>
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-gray-800 pt-4">
+                            <span id="customPrice" class="text-2xl font-black text-gold-400">350 ج.م</span>
+                            <button onclick="addCustomToCart()" class="gold-bg text-black font-black px-6 py-3 rounded-xl shadow-lg">إضافة للسلة</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REVIEWS SECTION -->
+        <section id="secReviews" class="hidden space-y-8">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl font-black font-amiri gold-gradient-text">آراء وتقييمات العملاء</h2>
+                <p class="text-gray-400 text-sm">شاركونا تجاربكم مع عطور Scent Craft</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div class="md:col-span-5 glass-card p-6 rounded-3xl space-y-4">
+                    <h3 class="font-bold text-white border-b border-gray-800 pb-2">اكتب تقييمك</h3>
+                    <form onsubmit="submitReview(event)" class="space-y-3 text-xs">
+                        <div>
+                            <label class="block text-gray-400 mb-1">الاسم</label>
+                            <input type="text" id="revName" required placeholder="اسمك الكريم" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-1">التقييم</label>
+                            <select id="revStars" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-gold-400 font-bold">
+                                <option value="5">⭐⭐⭐⭐⭐ (ممتاز جداً)</option>
+                                <option value="4">⭐⭐⭐⭐ (جيد جداً)</option>
+                                <option value="3">⭐⭐⭐ (مقبول)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-1">تعليقك</label>
+                            <textarea id="revComment" required rows="3" placeholder="أدخل رأيك في العطر والتجربة..." class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"></textarea>
+                        </div>
+                        <button type="submit" class="w-full gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg">نشر التقييم</button>
+                    </form>
+                </div>
+                <div id="reviewsList" class="md:col-span-7 space-y-4"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden">
+        <div class="absolute left-0 top-0 bottom-0 w-full max-w-md bg-[#121620] p-6 flex flex-col justify-between border-r border-gold-500/30 shadow-2xl">
             <div>
-                <h1 class="text-3xl font-black font-amiri text-white flex items-center gap-2">
-                    <i class="fa-solid fa-chart-line text-gold-500"></i> Dashboard الإدارة المباشرة
-                </h1>
-                <p class="text-xs text-gray-400 mt-1">إحصائيات الزيارات، المبيعات، ومتابعة أوردرات المتجر</p>
-            </div>
-            <a href="index.html" class="gold-bg text-black font-bold text-xs px-5 py-3 rounded-xl shadow-lg flex items-center gap-2 hover:opacity-90 transition">
-                <i class="fa-solid fa-store"></i> العودة للمتجر الرئيسي (index.html)
-            </a>
-        </div>
-
-        <!-- Dashboard Stats Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="glass-card p-5 rounded-2xl border-r-4 border-gold-500">
-                <div class="flex justify-between items-center text-gray-400 text-xs">
-                    <span>إجمالي المبيعات</span>
-                    <i class="fa-solid fa-coins text-gold-500"></i>
+                <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                    <h3 class="font-black text-white text-lg">سلة التسوق</h3>
+                    <button onclick="toggleCart(false)" class="text-gray-400 text-xl"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <p id="admRev" class="text-2xl font-black text-white mt-2">0 ج.م</p>
+                <div id="cartItemsContainer" class="py-4 space-y-3 max-h-[60vh] overflow-y-auto"></div>
             </div>
-            <div class="glass-card p-5 rounded-2xl border-r-4 border-blue-500">
-                <div class="flex justify-between items-center text-gray-400 text-xs">
-                    <span>عدد الطلبات</span>
-                    <i class="fa-solid fa-boxes-packing text-blue-400"></i>
-                </div>
-                <p id="admCnt" class="text-2xl font-black text-white mt-2">0</p>
-            </div>
-            <div class="glass-card p-5 rounded-2xl border-r-4 border-emerald-500">
-                <div class="flex justify-between items-center text-gray-400 text-xs">
-                    <span>الربح التقديري (45%)</span>
-                    <i class="fa-solid fa-sack-dollar text-emerald-400"></i>
-                </div>
-                <p id="admPrf" class="text-2xl font-black text-white mt-2">0 ج.م</p>
-            </div>
-            <div class="glass-card p-5 rounded-2xl border-r-4 border-purple-500">
-                <div class="flex justify-between items-center text-gray-400 text-xs">
-                    <span>عدد زيارات الموقع</span>
-                    <i class="fa-solid fa-eye text-purple-400"></i>
-                </div>
-                <p id="admVisits" class="text-2xl font-black text-white mt-2">0 زائر</p>
-            </div>
-        </div>
 
-        <!-- Orders Table -->
-        <div class="glass-card p-6 rounded-3xl space-y-4">
-            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                <h3 class="font-bold text-white text-base">جدول الطلبات المباشرة</h3>
-                <span class="text-xs text-gray-400">اضغط على أي صف لرؤية تفاصيل الطلب بالكامل</span>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-right text-xs">
-                    <thead class="bg-black/60 text-gray-400 border-b border-gray-800">
-                        <tr>
-                            <th class="p-3">رقم الطلب</th>
-                            <th class="p-3">اسم العميل</th>
-                            <th class="p-3">الهاتف</th>
-                            <th class="p-3">العنوان</th>
-                            <th class="p-3">المجموع</th>
-                            <th class="p-3">إجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersTbody" class="divide-y divide-gray-800 text-gray-300"></tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Order Detail View Modal -->
-    <div id="orderDetailModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-lg w-full rounded-3xl p-6 space-y-6 border border-gold-500/40">
-            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                <h3 id="modalOrderId" class="font-bold text-gold-400 text-base">تفاصيل الطلب</h3>
-                <button onclick="closeOrderDetail()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div id="modalOrderBody" class="space-y-4 text-xs"></div>
-            <div class="flex gap-2 pt-2 border-t border-gray-800">
-                <button onclick="window.print()" class="flex-grow gold-bg text-black font-bold py-3 rounded-xl">طباعة الفاتورة</button>
-                <button onclick="closeOrderDetail()" class="bg-gray-800 text-gray-300 font-bold px-5 py-3 rounded-xl">إغلاق</button>
+            <div class="border-t border-gray-800 pt-4 space-y-3">
+                <div class="flex justify-between text-base font-black text-gold-400">
+                    <span>الإجمالي:</span>
+                    <span id="cartTotal">0 ج.م</span>
+                </div>
+                <button onclick="openCheckout()" class="w-full gold-bg text-black font-black py-4 rounded-xl shadow-lg">إتمام الطلب</button>
             </div>
         </div>
     </div>
 
-    <script src="js/admin.js"></script>
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl p-6 space-y-4 shadow-2xl border border-gold-500/30">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                <h3 class="font-bold text-white text-lg">بيانات التوصيل</h3>
+                <button onclick="closeCheckout()" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="confirmOrder(event)" class="space-y-3 text-xs">
+                <input type="text" id="custName" placeholder="الاسم بالكامل" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                <input type="tel" id="custPhone" placeholder="رقم الهاتف" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                <textarea id="custAddr" placeholder="العنوان التفصيلي" required rows="2" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"></textarea>
+                <div class="flex gap-2 pt-2">
+                    <button type="submit" class="flex-grow gold-bg text-black font-black py-3.5 rounded-xl shadow-lg">تأكيد الطلب</button>
+                    <button type="button" onclick="sendWA()" class="bg-emerald-600 text-white font-bold px-4 rounded-xl flex items-center justify-center"><i class="fa-brands fa-whatsapp text-lg"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
 </body>
 </html>
