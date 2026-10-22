@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scent Craft | لوحة تحكم الأدمن الشاملة (CMS)</title>
+    <title>Scent Craft | لوحة تحكم الأدمن الشاملة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -29,80 +29,34 @@
     <!-- Auth Protection Overlay -->
     <div id="authOverlay" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center p-4">
         <div class="glass-card max-w-sm w-full p-8 rounded-3xl text-center space-y-4 border border-gold-500/40 shadow-2xl">
-            <div class="w-16 h-16 gold-bg rounded-2xl flex items-center justify-center text-black text-2xl mx-auto shadow-lg shadow-gold-500/20">
+            <div class="w-16 h-16 gold-bg rounded-2xl flex items-center justify-center text-black text-2xl mx-auto shadow-lg">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
             <h2 class="text-2xl font-bold font-amiri text-white">تسجيل دخول الأدمن</h2>
-            <p class="text-xs text-gray-400">أدخل كلمة المرور للتحكم الشامل بالمتجر</p>
-            <input type="password" id="adminPass" placeholder="كلمة المرور (1234)" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-center text-sm text-white outline-none focus:border-gold-500">
+            <input type="password" id="adminPass" placeholder="كلمة المرور (1234)" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-center text-sm text-white">
             <button onclick="checkAdminAuth()" class="w-full gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg">دخول</button>
         </div>
     </div>
 
-    <!-- Main Admin Dashboard -->
+    <!-- Main Dashboard -->
     <div class="max-w-7xl mx-auto space-y-8">
-        
-        <!-- Navbar Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-6">
-            <div>
-                <h1 class="text-3xl font-black font-amiri text-white flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-gold-500"></i> لوحة التحكم الشاملة بالمتجر (CMS)
-                </h1>
-                <p class="text-xs text-gray-400 mt-1">التحكم الكامل بالمنتجات، النوتات العطرية، الطلبات، وبنرات المتجر</p>
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="index.html" target="_blank" class="gold-bg text-black font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-1.5">
-                    <i class="fa-solid fa-store"></i> المتجر المباشر
-                </a>
-                <button onclick="adminLogout()" class="bg-red-500/20 border border-red-500/40 text-red-400 font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-red-500/30 transition">
-                    <i class="fa-solid fa-right-from-bracket ml-1"></i> خروج
-                </button>
-            </div>
-        </div>
-
-        <!-- Dashboard Stats Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="glass-card p-5 rounded-2xl border-r-4 border-gold-500">
-                <div class="flex justify-between items-center text-gray-400 text-xs">
-                    <span>إجمالي المبيعات</span>
-                    <i class="fa-solid fa-coins text-gold-500"></i>
-                </div>
-                <p id="admRev" class="text-2xl font-black text-white mt-2">0 ج.م</p>
-            </div>
-            <div class="glass-card p-5 rounded-2xl border-r-4 border-blue-500">
-                <div class="flex justify-between items-center text-gray-400 text-xs">
-                    <span>عدد الطلبات</span>
-                    <i class="fa-solid fa-boxes-packing text-blue-400"></i>
-                </div>
-                <p id="admCnt" class="text-2xl font-black text-white mt-2">0</p>
-            </div>
-            <div class="glass-card p-5 rounded-2xl border-r-4 border-emerald-500">
-                <div class="flex justify-between items-center text-gray-400 text-xs">
-                    <span>الربح الصافي التقديري</span>
-                    <i class="fa-solid fa-sack-dollar text-emerald-400"></i>
-                </div>
-                <p id="admPrf" class="text-2xl font-black text-white mt-2">0 ج.م</p>
-            </div>
-            <div class="glass-card p-5 rounded-2xl border-r-4 border-purple-500">
-                <div class="flex justify-between items-center text-gray-400 text-xs">
-                    <span>عدد زيارات الموقع</span>
-                    <i class="fa-solid fa-eye text-purple-400"></i>
-                </div>
-                <p id="admVisits" class="text-2xl font-black text-white mt-2">0 زائر</p>
+        <div class="flex justify-between items-center border-b border-gray-800 pb-6">
+            <h1 class="text-3xl font-black font-amiri text-white">لوحة تحكم الأدمن الكاملة</h1>
+            <div class="flex gap-2">
+                <a href="index.html" target="_blank" class="gold-bg text-black font-bold text-xs px-4 py-2.5 rounded-xl">المتجر</a>
+                <button onclick="adminLogout()" class="bg-red-500/20 text-red-400 border border-red-500/40 font-bold text-xs px-4 py-2.5 rounded-xl">خروج</button>
             </div>
         </div>
 
         <!-- Navigation Tabs -->
         <div class="flex border-b border-gray-800 space-x-6 space-x-reverse text-xs font-bold">
-            <button onclick="switchTab('orders')" id="tab_orders" class="pb-3 border-b-2 border-gold-500 text-gold-400">سجل الطلبات (Orders)</button>
-            <button onclick="switchTab('products')" id="tab_products" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white">إدارة المنتجات (Products DocType)</button>
-            <button onclick="switchTab('notes')" id="tab_notes" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white">إدارة نوتات المعمل (Notes DocType)</button>
-            <button onclick="switchTab('settings')" id="tab_settings" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white">إعدادات المتجر (Store Settings)</button>
+            <button onclick="switchTab('orders')" id="tab_orders" class="pb-3 border-b-2 border-gold-500 text-gold-400">إدارة الطلبات</button>
+            <button onclick="switchTab('products')" id="tab_products" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white">إدارة المنتجات (حذف وتعديل)</button>
         </div>
 
         <!-- TAB 1: ORDERS -->
         <div id="secTabOrders" class="glass-card p-6 rounded-3xl space-y-4">
-            <h3 class="font-bold text-white text-base">سجل الطلبات الحالية</h3>
+            <h3 class="font-bold text-white text-base">جميع الطلبات الواردة</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-right text-xs">
                     <thead class="bg-black/60 text-gray-400 border-b border-gray-800">
@@ -110,7 +64,6 @@
                             <th class="p-3">رقم الطلب</th>
                             <th class="p-3">العميل</th>
                             <th class="p-3">الهاتف</th>
-                            <th class="p-3">العنوان</th>
                             <th class="p-3">الإجمالي</th>
                             <th class="p-3">الإجراء</th>
                         </tr>
@@ -120,86 +73,27 @@
             </div>
         </div>
 
-        <!-- TAB 2: PRODUCTS CMS -->
+        <!-- TAB 2: PRODUCTS CRUD -->
         <div id="secTabProducts" class="hidden space-y-6">
             <div class="glass-card p-6 rounded-3xl space-y-4">
-                <h3 class="font-bold text-white text-base">إضافة منتج جديد لمتجر العميل</h3>
+                <h3 class="font-bold text-white text-base">إضافة أو تعديل منتج</h3>
                 <form onsubmit="saveProduct(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                    <input type="hidden" id="editIndex" value="">
                     <input type="text" id="pName" placeholder="اسم العطر" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    <input type="number" id="pPrice" placeholder="السعر (ج.م)" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    <input type="text" id="pNotes" placeholder="النوتات (مفصولة بفاصلة)" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    <input type="url" id="pImg" placeholder="رابط صورة العطر (URL)" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    <button type="submit" class="lg:col-span-4 gold-bg text-black font-bold py-3 rounded-xl shadow-lg">حفظ المنتج وإظهاره فوراً في المتجر</button>
+                    <input type="number" id="pPrice" placeholder="السعر" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <input type="text" id="pNotes" placeholder="النوتات" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <input type="url" id="pImg" placeholder="رابط الصورة" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <button type="submit" class="lg:col-span-4 gold-bg text-black font-bold py-3 rounded-xl shadow-lg">حفظ المنتج</button>
                 </form>
             </div>
 
             <div class="glass-card p-6 rounded-3xl space-y-4">
-                <h3 class="font-bold text-white text-base">المنتجات المعروضة حالياً</h3>
+                <h3 class="font-bold text-white text-base">قائمة المنتجات (يمكنك حذف أي منتج افتراضي أو جديد)</h3>
                 <div id="admProductsList" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
             </div>
         </div>
-
-        <!-- TAB 3: NOTES CMS -->
-        <div id="secTabNotes" class="hidden space-y-6">
-            <div class="glass-card p-6 rounded-3xl space-y-4">
-                <h3 class="font-bold text-white text-base">إضافة نوتة عطرية جديدة لمعمل 3D</h3>
-                <form onsubmit="saveNote(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                    <select id="nType" class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                        <option value="base">نوتة القاعدة (Base Note)</option>
-                        <option value="heart">نوتة القلب (Heart Note)</option>
-                        <option value="top">نوتة الافتتاحية (Top Note)</option>
-                    </select>
-                    <input type="text" id="nName" placeholder="اسم المكون العطري (مثال: مسك كشميري)" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    <button type="submit" class="gold-bg text-black font-bold py-3 rounded-xl shadow-lg">إضافة للمعمل</button>
-                </form>
-            </div>
-
-            <div class="glass-card p-6 rounded-3xl space-y-4">
-                <h3 class="font-bold text-white text-base">قائمة النوتات الحالية في المعمل</h3>
-                <div id="admNotesList" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs"></div>
-            </div>
-        </div>
-
-        <!-- TAB 4: STORE SETTINGS CMS -->
-        <div id="secTabSettings" class="hidden glass-card p-6 rounded-3xl space-y-4">
-            <h3 class="font-bold text-white text-base">تعديل بنر وبيانات المتجر</h3>
-            <form onsubmit="saveStoreSettings(event)" class="space-y-4 text-xs">
-                <div>
-                    <label class="block text-gray-400 mb-1">اسم البراند / الموقع</label>
-                    <input type="text" id="setBrandName" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                </div>
-                <div>
-                    <label class="block text-gray-400 mb-1">العنوان الرئيسي في البنر</label>
-                    <input type="text" id="setBannerTitle" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                </div>
-                <div>
-                    <label class="block text-gray-400 mb-1">الوصف الفرعي في البنر</label>
-                    <textarea id="setBannerDesc" rows="2" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"></textarea>
-                </div>
-                <div>
-                    <label class="block text-gray-400 mb-1">رقم الواتساب لاستلام الأوردرات مباشرة</label>
-                    <input type="text" id="setWA" placeholder="201000000000" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                </div>
-                <button type="submit" class="gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg">حفظ التغييرات</button>
-            </form>
-        </div>
-
     </div>
 
-    <!-- Order Detail Modal -->
-    <div id="orderDetailModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-lg w-full rounded-3xl p-6 space-y-6 border border-gold-500/40">
-            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                <h3 id="modalOrderId" class="font-bold text-gold-400 text-base">تفاصيل الطلب</h3>
-                <button onclick="closeOrderDetail()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div id="modalOrderBody" class="space-y-4 text-xs"></div>
-            <div class="flex gap-2 pt-2 border-t border-gray-800">
-                <button onclick="window.print()" class="flex-grow gold-bg text-black font-bold py-3 rounded-xl">طباعة الفاتورة</button>
-                <button onclick="closeOrderDetail()" class="bg-gray-800 text-gray-300 font-bold px-5 py-3 rounded-xl">إغلاق</button>
-            </div>
-        </div>
-    </div>
-<script src="js/admin.js?v=2.0"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>
