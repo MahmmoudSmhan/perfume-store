@@ -9,14 +9,14 @@ window.switchTab = function(tab) {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await window.supabaseClient.auth.getSession();
     if (session) {
-        const { data: profile } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
+        const { data: profile } = await window.supabaseClient.from('profiles').select('role').eq('id', session.user.id).single();
         if (profile && profile.role === 'admin') {
             document.getElementById('authOverlay').classList.add('hidden');
             renderAdmin();
         } else {
-            await supabase.auth.signOut();
+            await window.supabaseClient.auth.signOut();
             alert('هذا الحساب ليس لديه صلاحيات أدمن!');
         }
     }
@@ -26,19 +26,19 @@ async function checkAdminAuth(e) {
     e.preventDefault();
     const email = document.getElementById('adminEmail').value;
     const password = document.getElementById('adminPass').value;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
     if (error) return alert('بيانات الدخول خاطئة!');
-    const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
+    const { data: profile } = await window.supabaseClient.from('profiles').select('role').eq('id', data.user.id).single();
     if (profile && profile.role === 'admin') {
         document.getElementById('authOverlay').classList.add('hidden');
         renderAdmin();
     } else {
-        await supabase.auth.signOut();
+        await window.supabaseClient.auth.signOut();
         alert('أنت لست أدمن!');
     }
 }
 
-async function adminLogout() { await supabase.auth.signOut(); window.location.reload(); }
+async function adminLogout() { await window.supabaseClient.auth.signOut(); window.location.reload(); }
 
 async function renderAdmin() {
     await renderOrdersTable();
@@ -48,7 +48,7 @@ async function renderAdmin() {
 }
 
 async function renderOrdersTable() {
-    const { data, error } = await supabase.from('orders').select(`*, order_items(*)`).order('created_at', { ascending: false });
+    const { data, error } = await window.supabaseClient.from('orders').select(`*, order_items(*)`).order('created_at', { ascending: false });
     if (error) return;
     orders = data;
     document.getElementById('ordersTbody').innerHTML = orders.map((o, idx) => `
@@ -85,7 +85,7 @@ function openOrderDetail(idx) {
 
 async function delOrder(id) {
     if (confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
-        await supabase.from('orders').delete().eq('id', id);
+        await window.supabaseClient.from('orders').delete().eq('id', id);
         renderAdmin();
     }
 }
@@ -101,9 +101,9 @@ async function saveProduct(e) {
     if (file) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
-        const { error: uploadError } = await supabase.storage.from('product-images').upload(fileName, file);
+        const { error: uploadError } = await window.supabaseClient.storage.from('product-images').upload(fileName, file);
         if (uploadError) { alert('خطأ في رفع الصورة: ' + uploadError.message); btn.textContent = 'حفظ'; return; }
-        const { data } = supabase.storage.from('product-images').getPublicUrl(fileName);
+        const { data } = window.supabaseClient.storage.from('product-images').getPublicUrl(fileName);
         image_url = data.publicUrl;
     }
 
@@ -115,10 +115,10 @@ async function saveProduct(e) {
     if (image_url) prodData.image_url = image_url;
 
     if (id) {
-        await supabase.from('products').update(prodData).eq('id', id);
+        await window.supabaseClient.from('products').update(prodData).eq('id', id);
     } else {
         if(!image_url) { alert('يجب رفع صورة للمنتج!'); btn.textContent = 'حفظ'; return; }
-        await supabase.from('products').insert([prodData]);
+        await window.supabaseClient.from('products').insert([prodData]);
     }
     
     resetProductForm();
@@ -127,7 +127,7 @@ async function saveProduct(e) {
 }
 
 async function renderProductsAdmin() {
-    const { data: prods } = await supabase.from('products').select('*').order('id', { ascending: false });
+    const { data: prods } = await window.supabaseClient.from('products').select('*').order('id', { ascending: false });
     document.getElementById('admProductsList').innerHTML = prods.map(p => `
         <div class="bg-black/60 p-4 rounded-xl border border-gray-800 space-y-2 text-xs flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -143,7 +143,7 @@ async function renderProductsAdmin() {
 }
 
 async function editProduct(id) {
-    const { data: p } = await supabase.from('products').select('*').eq('id', id).single();
+    const { data: p } = await window.supabaseClient.from('products').select('*').eq('id', id).single();
     if (p) {
         document.getElementById('pId').value = p.id;
         document.getElementById('pName').value = p.name;
@@ -165,7 +165,7 @@ function resetProductForm() {
 
 async function delProduct(id) {
     if(!confirm('تأكيد حذف المنتج؟')) return;
-    await supabase.from('products').delete().eq('id', id);
+    await window.supabaseClient.from('products').delete().eq('id', id);
     renderProductsAdmin();
 }
 
@@ -173,14 +173,14 @@ async function saveNote(e) {
     e.preventDefault();
     const type = document.getElementById('nType').value;
     const name = document.getElementById('nName').value;
-    await supabase.from('perfume_notes').insert([{ type, name }]);
+    await window.supabaseClient.from('perfume_notes').insert([{ type, name }]);
     document.getElementById('nName').value = '';
     await renderNotesAdmin();
     alert('تم إضافة النوتة!');
 }
 
 async function renderNotesAdmin() {
-    const { data: notes } = await supabase.from('perfume_notes').select('*');
+    const { data: notes } = await window.supabaseClient.from('perfume_notes').select('*');
     if(!notes) return;
     let html = '';
     ['base', 'heart', 'top'].forEach(t => {
@@ -194,12 +194,12 @@ async function renderNotesAdmin() {
 }
 
 async function delNote(id) {
-    await supabase.from('perfume_notes').delete().eq('id', id);
+    await window.supabaseClient.from('perfume_notes').delete().eq('id', id);
     renderNotesAdmin();
 }
 
 async function loadSettingsForm() {
-    const { data: set } = await supabase.from('settings').select('*').eq('id', 1).single();
+    const { data: set } = await window.supabaseClient.from('settings').select('*').eq('id', 1).single();
     if (set) {
         document.getElementById('setBrandName').value = set.brand_name || '';
         document.getElementById('setBannerTitle').value = set.banner_title || '';
@@ -216,6 +216,6 @@ async function saveStoreSettings(e) {
         banner_desc: document.getElementById('setBannerDesc').value,
         wa_phone: document.getElementById('setWA').value
     };
-    await supabase.from('settings').update(set).eq('id', 1);
+    await window.supabaseClient.from('settings').update(set).eq('id', 1);
     alert('تم حفظ الإعدادات!');
 }
