@@ -3,42 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scent Craft | لوحة تحكم الأدمن الشاملة</title>
+    <title>Scent Craft | لوحة تحكم الأدمن</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        gold: { 400: '#fbbf24', 500: '#d4af37' },
-                        obsidian: '#0a0c10',
-                        panel: '#121620'
-                    },
-                    fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] }
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { gold: { 400: '#fbbf24', 500: '#d4af37' }, obsidian: '#0a0c10', panel: '#121620' }, fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] } } } }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-[#0a0c10] text-gray-100 p-4 md:p-8 min-h-screen">
 
-    <!-- Auth Protection Overlay -->
     <div id="authOverlay" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center p-4">
         <div class="glass-card max-w-sm w-full p-8 rounded-3xl text-center space-y-4 border border-gold-500/40 shadow-2xl">
-            <div class="w-16 h-16 gold-bg rounded-2xl flex items-center justify-center text-black text-2xl mx-auto shadow-lg">
-                <i class="fa-solid fa-shield-halved"></i>
-            </div>
+            <div class="w-16 h-16 gold-bg rounded-2xl flex items-center justify-center text-black text-2xl mx-auto shadow-lg"><i class="fa-solid fa-shield-halved"></i></div>
             <h2 class="text-2xl font-bold font-amiri text-white">تسجيل دخول الأدمن</h2>
-            <input type="password" id="adminPass" placeholder="كلمة المرور (1234)" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-center text-sm text-white outline-none focus:border-gold-500">
-            <button onclick="checkAdminAuth()" class="w-full gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg hover:opacity-90 transition">دخول</button>
+            <form onsubmit="checkAdminAuth(event)" class="space-y-3">
+                <input type="email" id="adminEmail" placeholder="الإيميل" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-center text-sm text-white outline-none focus:border-gold-500">
+                <input type="password" id="adminPass" placeholder="الباسورد" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-center text-sm text-white outline-none focus:border-gold-500">
+                <button type="submit" class="w-full gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg hover:opacity-90 transition">دخول</button>
+            </form>
         </div>
     </div>
 
-    <!-- Main Dashboard -->
     <div class="max-w-7xl mx-auto space-y-8">
         <div class="flex justify-between items-center border-b border-gray-800 pb-6">
             <h1 class="text-3xl font-black font-amiri text-white">لوحة تحكم الأدمن الكاملة</h1>
@@ -48,7 +36,6 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs -->
         <div class="flex flex-wrap border-b border-gray-800 gap-6 text-xs font-bold">
             <button onclick="switchTab('orders')" id="tab_orders" class="pb-3 border-b-2 border-gold-500 text-gold-400">إدارة الطلبات</button>
             <button onclick="switchTab('products')" id="tab_products" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white">إدارة المنتجات</button>
@@ -56,26 +43,16 @@
             <button onclick="switchTab('settings')" id="tab_settings" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white">إعدادات المتجر</button>
         </div>
 
-        <!-- TAB 1: ORDERS -->
         <div id="secTabOrders" class="glass-card p-6 rounded-3xl space-y-4">
-            <h3 class="font-bold text-white text-base">جميع الطلبات الواردة</h3>
+            <h3 class="font-bold text-white text-base">جميع الطلبات</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-right text-xs">
-                    <thead class="bg-black/60 text-gray-400 border-b border-gray-800">
-                        <tr>
-                            <th class="p-3">رقم الطلب</th>
-                            <th class="p-3">العميل</th>
-                            <th class="p-3">الهاتف</th>
-                            <th class="p-3">الإجمالي</th>
-                            <th class="p-3">الإجراء</th>
-                        </tr>
-                    </thead>
+                    <thead class="bg-black/60 text-gray-400 border-b border-gray-800"><tr><th class="p-3">رقم الطلب</th><th class="p-3">العميل</th><th class="p-3">الهاتف</th><th class="p-3">الإجمالي</th><th class="p-3">الإجراء</th></tr></thead>
                     <tbody id="ordersTbody" class="divide-y divide-gray-800 text-gray-300"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- TAB 2: PRODUCTS -->
         <div id="secTabProducts" class="hidden space-y-6">
             <div class="glass-card p-6 rounded-3xl space-y-4">
                 <h3 class="font-bold text-white text-base" id="productFormTitle">إضافة منتج جديد</h3>
@@ -84,72 +61,57 @@
                     <input type="text" id="pName" placeholder="اسم العطر" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
                     <input type="number" id="pPrice" placeholder="السعر" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
                     <input type="text" id="pNotes" placeholder="النوتات" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    <input type="url" id="pImg" placeholder="رابط الصورة" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <input type="file" id="pImgFile" accept="image/*" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-2.5 text-white file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gold-500/20 file:text-gold-400">
                     <button type="submit" id="productSubmitBtn" class="lg:col-span-4 gold-bg text-black font-bold py-3 rounded-xl shadow-lg">حفظ المنتج</button>
                 </form>
             </div>
-
             <div class="glass-card p-6 rounded-3xl space-y-4">
                 <h3 class="font-bold text-white text-base">قائمة المنتجات</h3>
                 <div id="admProductsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
         </div>
 
-        <!-- TAB 3: NOTES -->
         <div id="secTabNotes" class="hidden space-y-6">
             <div class="glass-card p-6 rounded-3xl space-y-4">
-                <h3 class="font-bold text-white text-base">إضافة نوتة عطرية للمعمل</h3>
+                <h3 class="font-bold text-white text-base">إضافة نوتة عطرية</h3>
                 <form onsubmit="saveNote(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                    <select id="nType" class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                        <option value="base">نوتة القاعدة (Base)</option>
-                        <option value="heart">نوتة القلب (Heart)</option>
-                        <option value="top">نوتة الافتتاحية (Top)</option>
-                    </select>
-                    <input type="text" id="nName" placeholder="اسم النوتة (مثال: مسك أبيض)" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    <button type="submit" class="gold-bg text-black font-bold py-3 rounded-xl shadow-lg">إضافة النوتة</button>
+                    <select id="nType" class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"><option value="base">القاعدة</option><option value="heart">القلب</option><option value="top">الافتتاحية</option></select>
+                    <input type="text" id="nName" placeholder="اسم النوتة" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <button type="submit" class="gold-bg text-black font-bold py-3 rounded-xl shadow-lg">إضافة</button>
                 </form>
             </div>
             <div id="admNotesList" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         </div>
 
-        <!-- TAB 4: SETTINGS -->
         <div id="secTabSettings" class="hidden space-y-6">
             <div class="glass-card p-6 rounded-3xl space-y-4">
-                <h3 class="font-bold text-white text-base">إعدادات المتجر الأساسية</h3>
+                <h3 class="font-bold text-white text-base">إعدادات المتجر</h3>
                 <form onsubmit="saveStoreSettings(event)" class="space-y-4 text-xs">
-                    <div>
-                        <label class="block text-gray-400 mb-2">اسم البراند</label>
-                        <input type="text" id="setBrandName" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    </div>
-                    <div>
-                        <label class="block text-gray-400 mb-2">عنوان البانر الرئيسي</label>
-                        <input type="text" id="setBannerTitle" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    </div>
-                    <div>
-                        <label class="block text-gray-400 mb-2">وصف البانر</label>
-                        <textarea id="setBannerDesc" required rows="2" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-gray-400 mb-2">رقم الواتساب</label>
-                        <input type="text" id="setWA" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
-                    </div>
+                    <div><label class="block text-gray-400 mb-2">اسم البراند</label><input type="text" id="setBrandName" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"></div>
+                    <div><label class="block text-gray-400 mb-2">عنوان البانر</label><input type="text" id="setBannerTitle" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"></div>
+                    <div><label class="block text-gray-400 mb-2">وصف البانر</label><textarea id="setBannerDesc" required rows="2" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"></textarea></div>
+                    <div><label class="block text-gray-400 mb-2">رقم الواتساب</label><input type="text" id="setWA" required class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white"></div>
                     <button type="submit" class="gold-bg text-black font-bold py-3 px-8 rounded-xl shadow-lg">حفظ الإعدادات</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Order Detail Modal -->
     <div id="orderDetailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="glass-card max-w-md w-full rounded-3xl p-6 space-y-4 shadow-2xl border border-gold-500/30">
             <div class="flex justify-between items-center border-b border-gray-800 pb-3">
                 <h3 id="modalOrderId" class="font-bold text-white text-lg">تفاصيل الطلب</h3>
-                <button onclick="closeOrderDetail()" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="document.getElementById('orderDetailModal').classList.add('hidden')" class="text-gray-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div id="modalOrderBody" class="space-y-4 text-xs max-h-[60vh] overflow-y-auto"></div>
         </div>
     </div>
 
-    <script src="js/admin.js?v=3.1"></script>
+    <script>
+        const SUPABASE_URL = 'حط_URL_بتاعك_هنا';
+        const SUPABASE_ANON_KEY = 'حط_المفتاح_بتاعك_هنا';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    </script>
+    <script src="js/admin.js"></script>
 </body>
 </html>
