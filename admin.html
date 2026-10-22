@@ -1,89 +1,99 @@
-let orders = [];
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scent Craft | لوحة تحكم الأدمن الشاملة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: { 400: '#fbbf24', 500: '#d4af37' },
+                        obsidian: '#0a0c10',
+                        panel: '#121620'
+                    },
+                    fontFamily: { cairo: ['Cairo', 'sans-serif'], amiri: ['Amiri', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#0a0c10] text-gray-100 p-4 md:p-8 min-h-screen">
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('scent_admin_logged_in') === 'true') {
-        document.getElementById('authOverlay').classList.add('hidden');
-        renderAdmin();
-    }
-});
-
-function checkAdminAuth() {
-    if (document.getElementById('adminPass').value === '1234') {
-        localStorage.setItem('scent_admin_logged_in', 'true');
-        document.getElementById('authOverlay').classList.add('hidden');
-        renderAdmin();
-    } else { alert('كلمة المرور غير صحيحة'); }
-}
-
-function adminLogout() {
-    localStorage.removeItem('scent_admin_logged_in');
-    document.getElementById('authOverlay').classList.remove('hidden');
-}
-
-function renderAdmin() {
-    orders = JSON.parse(localStorage.getItem('scent_orders')) || [];
-    renderOrders();
-    renderProductsAdmin();
-}
-
-function switchTab(tab) {
-    document.getElementById('secTabOrders').classList.add('hidden');
-    document.getElementById('secTabProducts').classList.add('hidden');
-    document.getElementById(`secTab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.remove('hidden');
-}
-
-function renderOrders() {
-    document.getElementById('ordersTbody').innerHTML = orders.map((o, idx) => `
-        <tr>
-            <td class="p-3 text-gold-400 font-bold">${o.id}</td>
-            <td class="p-3">${o.name}</td>
-            <td class="p-3">${o.phone}</td>
-            <td class="p-3">${o.total}</td>
-            <td class="p-3"><button onclick="delOrder(${idx})" class="text-red-400"><i class="fa-solid fa-trash"></i></button></td>
-        </tr>
-    `).join('');
-}
-
-function delOrder(idx) {
-    orders.splice(idx, 1);
-    localStorage.setItem('scent_orders', JSON.stringify(orders));
-    renderOrders();
-}
-
-const DEFAULT_PRODUCTS = [
-    { id: 1, name: "عطر عود موناكو الملكي", price: 580, notes: "دهن العود الهندي، ورد طائفي", image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=500&q=80" },
-    { id: 2, name: "بلاكبيري & باودر فرنسي", price: 420, notes: "توت أسود، مسك أبيض", image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=500&q=80" },
-    { id: 3, name: "توباكو آند ليذر نيش", price: 650, notes: "تبغ كوبي، جلد فاخر", image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=500&q=80" }
-];
-
-function saveProduct(e) {
-    e.preventDefault();
-    let prods = JSON.parse(localStorage.getItem('scent_products')) || DEFAULT_PRODUCTS;
-    prods.push({
-        id: Date.now(),
-        name: document.getElementById('pName').value,
-        price: parseInt(document.getElementById('pPrice').value),
-        notes: document.getElementById('pNotes').value,
-        image: document.getElementById('pImg').value
-    });
-    localStorage.setItem('scent_products', JSON.stringify(prods));
-    renderProductsAdmin();
-    alert('تم الحفظ بنجاح!');
-}
-
-function renderProductsAdmin() {
-    let prods = JSON.parse(localStorage.getItem('scent_products')) || DEFAULT_PRODUCTS;
-    document.getElementById('admProductsList').innerHTML = prods.map((p, idx) => `
-        <div class="glass-card p-4 rounded-xl flex justify-between items-center text-xs">
-            <div><p class="font-bold text-white">${p.name}</p><p class="text-gold-400">${p.price} ج.م</p></div>
-            <button onclick="delProduct(${idx})" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
+    <!-- Auth Protection Overlay -->
+    <div id="authOverlay" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center p-4">
+        <div class="glass-card max-w-sm w-full p-8 rounded-3xl text-center space-y-4 border border-gold-500/40 shadow-2xl">
+            <div class="w-16 h-16 gold-bg rounded-2xl flex items-center justify-center text-black text-2xl mx-auto shadow-lg">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2 class="text-2xl font-bold font-amiri text-white">تسجيل دخول الأدمن</h2>
+            <input type="password" id="adminPass" placeholder="كلمة المرور (1234)" class="w-full bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-center text-sm text-white outline-none focus:border-gold-500">
+            <button onclick="checkAdminAuth()" class="w-full gold-bg text-black font-bold py-3.5 rounded-xl shadow-lg hover:opacity-90 transition">دخول</button>
         </div>
-    `).join('');
-}
+    </div>
 
-function delProduct(idx) {
-    let prods = JSON.parse(localStorage.getItem('scent_products')) || DEFAULT_PRODUCTS;
-    prods.splice(idx, 1);
-    localStorage.setItem('scent_products', JSON.stringify(prods));
-    renderProductsAdmin();
-}
+    <!-- Main Dashboard -->
+    <div class="max-w-7xl mx-auto space-y-8">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-6">
+            <h1 class="text-3xl font-black font-amiri text-white">لوحة تحكم الأدمن الكاملة</h1>
+            <div class="flex gap-2">
+                <a href="index.html" target="_blank" class="gold-bg text-black font-bold text-xs px-4 py-2.5 rounded-xl">المتجر</a>
+                <button onclick="adminLogout()" class="bg-red-500/20 text-red-400 border border-red-500/40 font-bold text-xs px-4 py-2.5 rounded-xl">خروج</button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-gray-800 space-x-6 space-x-reverse text-xs font-bold">
+            <button onclick="switchTab('orders')" id="tab_orders" class="pb-3 border-b-2 border-gold-500 text-gold-400">إدارة الطلبات</button>
+            <button onclick="switchTab('products')" id="tab_products" class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white">إدارة المنتجات (حذف وتعديل)</button>
+        </div>
+
+        <!-- TAB 1: ORDERS -->
+        <div id="secTabOrders" class="glass-card p-6 rounded-3xl space-y-4">
+            <h3 class="font-bold text-white text-base">جميع الطلبات الواردة</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-xs">
+                    <thead class="bg-black/60 text-gray-400 border-b border-gray-800">
+                        <tr>
+                            <th class="p-3">رقم الطلب</th>
+                            <th class="p-3">العميل</th>
+                            <th class="p-3">الهاتف</th>
+                            <th class="p-3">الإجمالي</th>
+                            <th class="p-3">الإجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTbody" class="divide-y divide-gray-800 text-gray-300"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: PRODUCTS CRUD -->
+        <div id="secTabProducts" class="hidden space-y-6">
+            <div class="glass-card p-6 rounded-3xl space-y-4">
+                <h3 class="font-bold text-white text-base">إضافة أو تعديل منتج</h3>
+                <form onsubmit="saveProduct(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                    <input type="text" id="pName" placeholder="اسم العطر" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <input type="number" id="pPrice" placeholder="السعر" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <input type="text" id="pNotes" placeholder="النوتات" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <input type="url" id="pImg" placeholder="رابط الصورة" required class="bg-[#0a0c10] border border-gray-800 rounded-xl p-3 text-white">
+                    <button type="submit" class="lg:col-span-4 gold-bg text-black font-bold py-3 rounded-xl shadow-lg">حفظ المنتج</button>
+                </form>
+            </div>
+
+            <div class="glass-card p-6 rounded-3xl space-y-4">
+                <h3 class="font-bold text-white text-base">قائمة المنتجات (يمكنك حذف أي منتج)</h3>
+                <div id="admProductsList" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- استدعاء ملف الـ JS الخارجي بشكل صحيح -->
+    <script src="js/admin.js?v=3.0"></script>
+</body>
+</html>
